@@ -1,0 +1,32 @@
+{
+  "name": "skribbl-multiplayer",
+  "version": "1.0.0",
+  "description": "Real-time multiplayer drawing and guessing game built with Node.js, Socket.IO, and React",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,green\" \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "start": "node server/index.js",
+    "test:load": "node server/tests/load-test.js"
+  },
+  "keywords": [
+    "skribbl",
+    "multiplayer",
+    "realtime",
+    "drawing",
+    "socketio",
+    "react"
+  ],
+  "author": "Amit",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^10.0.6",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "socket.io": "^4.8.4",
+    "socket.io-client": "^4.8.4"
+  }
+}
