@@ -92,26 +92,35 @@ export default function Lobby({
   // If already inside a created room lobby
   if (isInRoom) {
     return (
-      <div style={{ maxWidth: '800px', margin: '0 auto', width: '100%' }} className="pop-in">
-        <div className="card" style={{ padding: '28px', background: '#ffffff', borderRadius: '16px' }}>
+      <div style={{ maxWidth: '850px', margin: '0 auto', width: '100%' }} className="pop-in">
+        <div className="card" style={{ padding: 'clamp(16px, 3vw, 28px)', background: '#ffffff', borderRadius: '16px' }}>
           {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '16px', marginBottom: '20px' }}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
+            borderBottom: '1px solid #e2e8f0', 
+            paddingBottom: '16px', 
+            marginBottom: '20px',
+            flexWrap: 'wrap',
+            gap: '12px'
+          }}>
             <div>
-              <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#1e3a8a' }}>Game Lobby</h2>
-              <p style={{ color: '#64748b', fontSize: '14px' }}>Invite your friends and configure match rules!</p>
+              <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#1e3a8a' }}>Game Lobby</h2>
+              <p style={{ color: '#64748b', fontSize: '13px' }}>Invite your friends and configure match rules!</p>
             </div>
 
             {/* Room Code Badge */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <div style={{ 
                 background: '#eff6ff', 
                 border: '2px solid #3b82f6', 
-                padding: '8px 16px', 
+                padding: '6px 14px', 
                 borderRadius: '10px',
                 textAlign: 'center'
               }}>
-                <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 800 }}>ROOM CODE</div>
-                <div style={{ fontFamily: 'Fredoka, cursive', fontSize: '22px', fontWeight: 800, color: '#1e3a8a', letterSpacing: '2px' }}>
+                <div style={{ fontSize: '10px', color: '#1d4ed8', fontWeight: 800 }}>ROOM CODE</div>
+                <div style={{ fontFamily: 'Fredoka, cursive', fontSize: '20px', fontWeight: 800, color: '#1e3a8a', letterSpacing: '2px' }}>
                   {roomId}
                 </div>
               </div>
@@ -119,26 +128,26 @@ export default function Lobby({
               <button
                 onClick={handleCopyLink}
                 className="btn btn-primary"
-                style={{ padding: '12px 16px' }}
+                style={{ padding: '10px 14px' }}
                 title="Copy shareable link"
               >
-                {copied ? <Check size={18} /> : <Share2 size={18} />}
-                <span>{copied ? 'Link Copied!' : 'Share Link'}</span>
+                {copied ? <Check size={16} /> : <Share2 size={16} />}
+                <span>{copied ? 'Copied!' : 'Share Link'}</span>
               </button>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
             {/* Players Joined List */}
-            <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <span style={{ fontWeight: 800, color: '#1e293b', fontSize: '16px' }}>
+            <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <span style={{ fontWeight: 800, color: '#1e293b', fontSize: '15px' }}>
                   Players Ready ({players.length})
                 </span>
-                <span style={{ fontSize: '12px', color: '#64748b' }}>Min: 2 players</span>
+                <span style={{ fontSize: '11px', color: '#64748b' }}>Min: 2 players</span>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '240px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '220px', overflowY: 'auto' }}>
                 {players.map((p) => (
                   <div 
                     key={p.id}
@@ -147,29 +156,29 @@ export default function Lobby({
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       background: '#ffffff',
-                      padding: '10px 14px',
+                      padding: '8px 12px',
                       borderRadius: '8px',
                       border: '1px solid #e2e8f0'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{ fontSize: '24px' }}>{AVATARS[p.avatar || 0]}</span>
-                      <span style={{ fontWeight: 700, fontSize: '15px', color: '#0f172a' }}>{p.name}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '20px' }}>{AVATARS[p.avatar || 0]}</span>
+                      <span style={{ fontWeight: 700, fontSize: '14px', color: '#0f172a' }}>{p.name}</span>
                     </div>
 
                     {p.isHost && (
                       <span style={{ 
                         display: 'flex', 
                         alignItems: 'center', 
-                        gap: '4px', 
+                        gap: '3px', 
                         background: '#fef3c7', 
                         color: '#b45309', 
-                        padding: '4px 8px', 
+                        padding: '3px 6px', 
                         borderRadius: '6px', 
-                        fontSize: '12px', 
+                        fontSize: '11px', 
                         fontWeight: 700 
                       }}>
-                        <Crown size={14} /> Host
+                        <Crown size={12} /> Host
                       </span>
                     )}
                   </div>
@@ -178,17 +187,17 @@ export default function Lobby({
             </div>
 
             {/* Room Settings */}
-            <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                <Settings size={18} color="#3b82f6" />
-                <span style={{ fontWeight: 800, color: '#1e293b', fontSize: '16px' }}>Game Settings</span>
+            <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+                <Settings size={16} color="#3b82f6" />
+                <span style={{ fontWeight: 800, color: '#1e293b', fontSize: '15px' }}>Game Settings</span>
                 {!isHost && <span style={{ fontSize: '11px', color: '#64748b', marginLeft: 'auto' }}>Host controlled</span>}
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {/* Rounds */}
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '3px' }}>
                     Number of Rounds
                   </label>
                   <select
@@ -199,7 +208,7 @@ export default function Lobby({
                       setRounds(val);
                       handleSettingsChange({ rounds: val });
                     }}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px' }}
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px' }}
                   >
                     <option value={2}>2 Rounds</option>
                     <option value={3}>3 Rounds (Standard)</option>
@@ -210,7 +219,7 @@ export default function Lobby({
 
                 {/* Draw Time */}
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '3px' }}>
                     Draw Time (Seconds)
                   </label>
                   <select
@@ -221,7 +230,7 @@ export default function Lobby({
                       setDrawTime(val);
                       handleSettingsChange({ drawTime: val });
                     }}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px' }}
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px' }}
                   >
                     <option value={30}>30s (Rapid)</option>
                     <option value={45}>45s</option>
@@ -233,7 +242,7 @@ export default function Lobby({
 
                 {/* Word List Preset */}
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '3px' }}>
                     Word List Category
                   </label>
                   <select
@@ -243,7 +252,7 @@ export default function Lobby({
                       setWordPreset(e.target.value);
                       handleSettingsChange({ wordPreset: e.target.value });
                     }}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px' }}
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px' }}
                   >
                     {PRESET_OPTIONS.map((opt) => (
                       <option key={opt.id} value={opt.id}>{opt.label}</option>
@@ -254,18 +263,18 @@ export default function Lobby({
                 {/* Custom Words */}
                 {isHost && (
                   <div>
-                    <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '3px' }}>
                       Custom Words (Comma-separated, optional)
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. taj mahal, cricket, python, samosa"
+                      placeholder="e.g. taj mahal, cricket, python"
                       value={customWords}
                       onChange={(e) => {
                         setCustomWords(e.target.value);
                         handleSettingsChange({ customWords: e.target.value });
                       }}
-                      style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px' }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '12px' }}
                     />
                   </div>
                 )}
@@ -274,24 +283,25 @@ export default function Lobby({
           </div>
 
           {/* Start Game Action */}
-          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
             {isHost ? (
               <button
                 onClick={onStartGame}
                 className="btn btn-success"
-                style={{ padding: '14px 40px', fontSize: '18px', borderRadius: '12px' }}
+                style={{ padding: '12px 36px', fontSize: '16px', borderRadius: '10px' }}
               >
-                <Play size={22} fill="white" />
+                <Play size={20} fill="white" />
                 <span>Start Game</span>
               </button>
             ) : (
               <div style={{ 
                 background: '#eff6ff', 
                 color: '#1d4ed8', 
-                padding: '12px 24px', 
-                borderRadius: '10px', 
+                padding: '10px 20px', 
+                borderRadius: '8px', 
                 fontWeight: 700,
-                fontSize: '15px' 
+                fontSize: '14px',
+                textAlign: 'center' 
               }}>
                 Waiting for the host to start the game...
               </div>
@@ -304,27 +314,27 @@ export default function Lobby({
 
   // Not in a room: Create / Join landing screen
   return (
-    <div style={{ maxWidth: '480px', margin: '40px auto 0', width: '100%' }} className="pop-in">
-      <div className="card" style={{ padding: '32px 28px', background: '#ffffff', borderRadius: '20px' }}>
+    <div style={{ maxWidth: '440px', margin: '20px auto 0', width: '100%' }} className="pop-in">
+      <div className="card" style={{ padding: 'clamp(20px, 4vw, 30px)', background: '#ffffff', borderRadius: '16px' }}>
         {/* Brand */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <div style={{ display: 'inline-flex', padding: '16px', background: '#eff6ff', borderRadius: '50%', marginBottom: '12px' }}>
-            <Palette size={40} color="#3b82f6" />
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <div style={{ display: 'inline-flex', padding: '12px', background: '#eff6ff', borderRadius: '50%', marginBottom: '10px' }}>
+            <Palette size={34} color="#3b82f6" />
           </div>
-          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#1e3a8a', letterSpacing: '-0.5px' }}>
-            Skribbl<span style={{ color: '#3b82f6' }}>.io</span>
+          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#1e3a8a', letterSpacing: '-0.5px' }}>
+            Doodle<span style={{ color: '#3b82f6' }}>Clash</span>
           </h1>
-          <p style={{ color: '#64748b', fontSize: '15px', marginTop: '4px' }}>
+          <p style={{ color: '#64748b', fontSize: '13px', marginTop: '2px' }}>
             Real-time Multiplayer Drawing & Guessing
           </p>
         </div>
 
         {/* Player Profile Setup */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '6px' }}>
+        <div style={{ marginBottom: '18px' }}>
+          <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '6px' }}>
             Choose Your Avatar
           </label>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '6px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '6px', marginBottom: '14px' }}>
             {AVATARS.map((av, idx) => (
               <button
                 key={idx}
@@ -334,11 +344,11 @@ export default function Lobby({
                   saveStoredAvatar(idx);
                 }}
                 style={{
-                  fontSize: '24px',
+                  fontSize: '22px',
                   background: avatar === idx ? '#eff6ff' : '#f8fafc',
                   border: avatar === idx ? '2px solid #3b82f6' : '1px solid #e2e8f0',
-                  borderRadius: '10px',
-                  padding: '6px',
+                  borderRadius: '8px',
+                  padding: '5px',
                   cursor: 'pointer',
                   transform: avatar === idx ? 'scale(1.15)' : 'scale(1)',
                   transition: 'all 0.15s ease'
@@ -349,7 +359,7 @@ export default function Lobby({
             ))}
           </div>
 
-          <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '6px' }}>
+          <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '5px' }}>
             Your Nickname
           </label>
           <input
@@ -363,10 +373,10 @@ export default function Lobby({
             }}
             style={{
               width: '100%',
-              padding: '12px 16px',
-              borderRadius: '10px',
+              padding: '10px 14px',
+              borderRadius: '8px',
               border: '1.5px solid #cbd5e1',
-              fontSize: '16px',
+              fontSize: '15px',
               fontWeight: 600,
               outline: 'none'
             }}
@@ -374,20 +384,20 @@ export default function Lobby({
         </div>
 
         {/* Tab Selector: Create Room vs Join Room */}
-        <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '10px', padding: '4px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '3px', marginBottom: '16px' }}>
           <button
             onClick={() => setTab('create')}
             style={{
               flex: 1,
-              padding: '10px',
+              padding: '9px',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '6px',
               fontWeight: 700,
-              fontSize: '14px',
+              fontSize: '13px',
               cursor: 'pointer',
               background: tab === 'create' ? '#ffffff' : 'transparent',
               color: tab === 'create' ? '#1e3a8a' : '#64748b',
-              boxShadow: tab === 'create' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none'
+              boxShadow: tab === 'create' ? '0 2px 5px rgba(0,0,0,0.06)' : 'none'
             }}
           >
             Create Room
@@ -396,15 +406,15 @@ export default function Lobby({
             onClick={() => setTab('join')}
             style={{
               flex: 1,
-              padding: '10px',
+              padding: '9px',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '6px',
               fontWeight: 700,
-              fontSize: '14px',
+              fontSize: '13px',
               cursor: 'pointer',
               background: tab === 'join' ? '#ffffff' : 'transparent',
               color: tab === 'join' ? '#1e3a8a' : '#64748b',
-              boxShadow: tab === 'join' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none'
+              boxShadow: tab === 'join' ? '0 2px 5px rgba(0,0,0,0.06)' : 'none'
             }}
           >
             Join Room
@@ -417,14 +427,14 @@ export default function Lobby({
               onClick={() => onCreateRoom({ rounds, drawTime, wordPreset, customWords })}
               disabled={!playerName.trim()}
               className="btn btn-primary"
-              style={{ width: '100%', padding: '14px', fontSize: '16px' }}
+              style={{ width: '100%', padding: '12px', fontSize: '15px' }}
             >
-              <PlusCircle size={20} />
+              <PlusCircle size={18} />
               <span>Create Private Room</span>
             </button>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <input
               type="text"
               placeholder="Enter 6-character room code..."
@@ -432,10 +442,10 @@ export default function Lobby({
               onChange={(e) => setRoomCodeInput(e.target.value.toUpperCase().slice(0, 6))}
               style={{
                 width: '100%',
-                padding: '12px 16px',
-                borderRadius: '10px',
+                padding: '10px 14px',
+                borderRadius: '8px',
                 border: '1.5px solid #cbd5e1',
-                fontSize: '16px',
+                fontSize: '15px',
                 fontWeight: 700,
                 textAlign: 'center',
                 letterSpacing: '2px',
@@ -446,9 +456,9 @@ export default function Lobby({
               onClick={() => onJoinRoom(roomCodeInput)}
               disabled={!playerName.trim() || !roomCodeInput.trim()}
               className="btn btn-success"
-              style={{ width: '100%', padding: '14px', fontSize: '16px' }}
+              style={{ width: '100%', padding: '12px', fontSize: '15px' }}
             >
-              <LogIn size={20} />
+              <LogIn size={18} />
               <span>Join Room</span>
             </button>
           </div>

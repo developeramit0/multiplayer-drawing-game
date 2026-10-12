@@ -30,47 +30,73 @@ export default function Header({
     setMuted(nextMuted);
   };
 
-  // Timer alert colors: green when > 20s, yellow 10-20s, red <= 10s
   const timerColor = timeLeft <= 10 ? '#ef4444' : timeLeft <= 20 ? '#f59e0b' : '#10b981';
 
   return (
-    <header className="card" style={{ padding: '12px 20px', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+    <header 
+      className="card" 
+      style={{ 
+        padding: '10px 16px', 
+        marginBottom: '10px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        gap: '10px', 
+        flexWrap: 'wrap' 
+      }}
+    >
       {/* Brand & Round */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Palette size={28} color="#3b82f6" />
-          <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#1e3a8a', letterSpacing: '-0.5px' }}>
-            Skribbl<span style={{ color: '#3b82f6' }}>.io</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Palette size={24} color="#3b82f6" />
+          <h1 style={{ fontSize: '20px', fontWeight: 800, color: '#1e3a8a', letterSpacing: '-0.5px' }}>
+            Doodle<span style={{ color: '#3b82f6' }}>Clash</span>
           </h1>
         </div>
 
         {status !== 'LOBBY' && (
-          <div style={{ background: '#eff6ff', padding: '6px 14px', borderRadius: '20px', fontWeight: 700, fontSize: '14px', color: '#1e40af', border: '1px solid #bfdbfe' }}>
-            Round {round} / {maxRounds}
+          <div style={{ 
+            background: '#eff6ff', 
+            padding: '4px 10px', 
+            borderRadius: '16px', 
+            fontWeight: 700, 
+            fontSize: '12px', 
+            color: '#1e40af', 
+            border: '1px solid #bfdbfe',
+            whiteSpace: 'nowrap'
+          }}>
+            R{round}/{maxRounds}
           </div>
         )}
       </div>
 
       {/* Center: Timer & Word / Blanks */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, justifyContent: 'center' }}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '12px', 
+        justifyContent: 'center',
+        flexWrap: 'wrap'
+      }}>
         {status === 'DRAWING' && (
           <>
             {/* Timer Badge */}
             <div style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '6px', 
+              gap: '4px', 
               background: '#f8fafc', 
               border: `2px solid ${timerColor}`, 
-              borderRadius: '24px', 
-              padding: '6px 16px',
+              borderRadius: '20px', 
+              padding: '4px 12px',
               fontWeight: 800,
-              fontSize: '18px',
+              fontSize: '16px',
               color: timerColor,
               boxShadow: timeLeft <= 10 ? '0 0 10px rgba(239, 68, 68, 0.4)' : 'none',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap'
             }}>
-              <Clock size={20} color={timerColor} />
+              <Clock size={16} color={timerColor} />
               <span>{timeLeft}s</span>
             </div>
 
@@ -78,14 +104,18 @@ export default function Header({
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div style={{ 
                 fontFamily: 'Fredoka, cursive',
-                fontSize: '26px', 
+                fontSize: 'clamp(18px, 4vw, 24px)', 
                 fontWeight: 700, 
-                letterSpacing: isDrawer ? '1px' : '6px',
+                letterSpacing: isDrawer ? '1px' : 'clamp(2px, 1.2vw, 5px)',
                 color: isDrawer ? '#15803d' : '#0f172a',
                 background: isDrawer ? '#f0fdf4' : '#f8fafc',
-                padding: '4px 18px',
+                padding: '3px 14px',
                 borderRadius: '8px',
-                border: isDrawer ? '1px solid #bbf7d0' : '1px solid #e2e8f0'
+                border: isDrawer ? '1px solid #bbf7d0' : '1px solid #e2e8f0',
+                maxWidth: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
               }}>
                 {isDrawer ? (
                   <span>Word: <strong>{word}</strong></span>
@@ -94,48 +124,56 @@ export default function Header({
                 )}
               </div>
               <span style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', fontWeight: 600 }}>
-                {isDrawer ? 'You are drawing! Make it clear!' : `${drawerName ? `${drawerName} is drawing` : 'Guess the word!'}`}
+                {isDrawer ? 'You are drawing!' : `${drawerName ? `${drawerName} is drawing` : 'Guess the word!'}`}
               </span>
             </div>
           </>
         )}
 
         {status === 'CHOOSING_WORD' && (
-          <div style={{ background: '#fef3c7', padding: '8px 18px', borderRadius: '20px', color: '#b45309', fontWeight: 700, fontSize: '15px' }}>
-            {isDrawer ? 'Pick a word to draw!' : `${drawerName || 'Drawer'} is choosing a word... (${timeLeft}s)`}
+          <div style={{ 
+            background: '#fef3c7', 
+            padding: '6px 14px', 
+            borderRadius: '16px', 
+            color: '#b45309', 
+            fontWeight: 700, 
+            fontSize: '13px',
+            textAlign: 'center' 
+          }}>
+            {isDrawer ? 'Pick a word to draw!' : `${drawerName || 'Drawer'} is choosing (${timeLeft}s)`}
           </div>
         )}
       </div>
 
-      {/* Right: Room ID, Copy Link, Sound Toggle */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      {/* Right Controls: Share, Sound, Leave */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
         <button
           onClick={handleCopyLink}
           className="btn btn-secondary"
-          style={{ padding: '6px 12px', fontSize: '13px' }}
+          style={{ padding: '6px 10px', fontSize: '12px' }}
           title="Share invite link"
         >
-          {copied ? <Check size={16} color="#10b981" /> : <Share2 size={16} />}
-          <span>{copied ? 'Copied Link!' : `Room: ${roomId}`}</span>
+          {copied ? <Check size={14} color="#10b981" /> : <Share2 size={14} />}
+          <span>{copied ? 'Copied!' : roomId}</span>
         </button>
 
         <button
           onClick={handleToggleSound}
           className="btn btn-secondary"
-          style={{ padding: '8px', borderRadius: '50%' }}
+          style={{ padding: '7px', borderRadius: '50%' }}
           title={muted ? 'Unmute sounds' : 'Mute sounds'}
         >
-          {muted ? <VolumeX size={18} color="#ef4444" /> : <Volume2 size={18} color="#3b82f6" />}
+          {muted ? <VolumeX size={16} color="#ef4444" /> : <Volume2 size={16} color="#3b82f6" />}
         </button>
 
         {onLeaveRoom && (
           <button
             onClick={onLeaveRoom}
             className="btn btn-secondary"
-            style={{ padding: '8px', borderRadius: '50%', color: '#ef4444' }}
+            style={{ padding: '7px', borderRadius: '50%', color: '#ef4444' }}
             title="Leave Room & Go Home"
           >
-            <LogOut size={18} />
+            <LogOut size={16} />
           </button>
         )}
       </div>

@@ -92,7 +92,7 @@ node server/tests/load-test.js 30 4 5
 - **Process Memory (RSS):** **69.35 MB**
 
 For the complete technical breakdown, read:  
-👉 [**docs/QUESTION_1_TECHNICAL_NOTE.md**](file:///c:/Users/Amit/Downloads/skribbl-multiplayer/docs/QUESTION_1_TECHNICAL_NOTE.md)
+👉 [**docs/QUESTION_1_TECHNICAL_NOTE.md**]
 
 ---
 
@@ -100,7 +100,7 @@ For the complete technical breakdown, read:
 
 A comprehensive 5-page System Architecture Document addressing Spotify-style shared listening rooms at a scale of **20M MAU, 2M peak concurrent listeners, 50M track catalogue, and 200k shared rooms** is included:
 
-👉 [**docs/QUESTION_2_SYSTEM_DESIGN.md**](file:///c:/Users/Amit/Downloads/skribbl-multiplayer/docs/QUESTION_2_SYSTEM_DESIGN.md)
+👉 [**docs/QUESTION_2_SYSTEM_DESIGN.md**]
 
 ### Key Highlights of Question 2:
 1. **Audio Delivery Subsystem:** Lossless FLAC master storage in S3, asynchronous CMAF chunking into 2-second HLS/MPEG-DASH segments, multi-tiered ABR, and Byte-Range pre-fetching for < 150ms instant playback.
@@ -156,8 +156,3 @@ skribbl-multiplayer/
 └── README.md                    # Project documentation & run guide
 ```
 
----
-
-## 📧 Submission Info
-- **Candidate:** Amit  
-- **Submission Email:** `aditya.patil@sapienrobotics.ai`

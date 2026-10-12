@@ -28,6 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, .font-display {
@@ -75,14 +76,15 @@ h1, h2, h3, .font-display {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 10px 18px;
+  font-size: 15px;
   font-weight: 600;
   border-radius: 10px;
   border: none;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   user-select: none;
+  touch-action: manipulation;
 }
 
 .btn:active {
@@ -135,12 +137,12 @@ h1, h2, h3, .font-display {
 }
 
 @keyframes popIn {
-  0% { transform: scale(0.9); opacity: 0; }
+  0% { transform: scale(0.92); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 
 .pop-in {
-  animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: popIn 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 /* Tool cursor */
@@ -152,4 +154,196 @@ h1, h2, h3, .font-display {
 }
 .cursor-eraser {
   cursor: grab;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT SYSTEM
+   ========================================================================== */
+
+/* Main 3-Column Game Board */
+.game-board {
+  display: grid;
+  grid-template-columns: 240px 1fr 310px;
+  gap: 12px;
+  flex: 1;
+  min-height: 580px;
+}
+
+.game-col-players {
+  min-width: 0;
+}
+
+.game-col-canvas {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-col-chat {
+  min-width: 0;
+}
+
+/* Mobile-only toggle tab bar */
+.mobile-tabs {
+  display: none;
+}
+
+/* Canvas Toolbar */
+.canvas-toolbar {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #ffffff;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.color-palette-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+/* Replay Theater Modal Layout */
+.replay-container {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.replay-sidebar {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (Tablets: <= 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .app-container {
+    padding: 8px;
+  }
+
+  .game-board {
+    grid-template-columns: 210px 1fr 270px;
+    gap: 10px;
+  }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (Small Tablets & Large Phones: <= 860px)
+   ========================================================================== */
+@media (max-width: 860px) {
+  .game-board {
+    display: flex;
+    flex-direction: column;
+    min-height: unset;
+    gap: 10px;
+  }
+
+  /* Show mobile tabs to switch between Chat and Players */
+  .mobile-tabs {
+    display: flex;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 4px;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2px;
+  }
+
+  .mobile-tab-btn {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    background: transparent;
+    color: #64748b;
+    transition: all 0.15s ease;
+  }
+
+  .mobile-tab-btn.active {
+    background: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  }
+
+  /* Hide player list on mobile unless tab is active */
+  .game-col-players.mobile-hidden {
+    display: none !important;
+  }
+
+  /* Hide chat on mobile unless tab is active */
+  .game-col-chat.mobile-hidden {
+    display: none !important;
+  }
+
+  .game-col-players, .game-col-chat {
+    max-height: 400px;
+  }
+
+  /* Replay theater stacked */
+  .replay-container {
+    flex-direction: column;
+  }
+
+  .replay-sidebar {
+    width: 100%;
+    max-height: 180px;
+  }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (Mobile Phones: <= 580px)
+   ========================================================================== */
+@media (max-width: 580px) {
+  .app-container {
+    padding: 6px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .canvas-toolbar {
+    padding: 8px 10px;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .toolbar-group {
+    justify-content: center;
+  }
+
+  .color-palette-group {
+    justify-content: center;
+  }
+
+  /* Compact Podium on Mobile */
+  .podium-container {
+    height: 130px !important;
+    gap: 6px !important;
+  }
 }

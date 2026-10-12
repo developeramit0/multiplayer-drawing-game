@@ -4,9 +4,7 @@ import {
   PaintBucket, 
   Eraser, 
   RotateCcw, 
-  Trash2, 
-  Minus, 
-  CircleDot 
+  Trash2 
 } from 'lucide-react';
 import { socket } from '../socket.js';
 import { performFloodFill } from '../utils/floodFill.js';
@@ -145,9 +143,12 @@ export default function Canvas({
     return { x, y };
   };
 
-  // Drawing event handlers
+  // Drawing event handlers with touch scrolling prevention
   const handlePointerDown = (e) => {
     if (!isDrawer) return;
+    if (e.cancelable && e.type.startsWith('touch')) {
+      e.preventDefault();
+    }
     const coords = getNormalizedCoords(e);
 
     // Flood fill
@@ -181,6 +182,9 @@ export default function Canvas({
 
   const handlePointerMove = (e) => {
     if (!isDrawer || !isDrawingRef.current) return;
+    if (e.cancelable && e.type.startsWith('touch')) {
+      e.preventDefault();
+    }
     const coords = getNormalizedCoords(e);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -202,12 +206,11 @@ export default function Canvas({
       };
       socket.emit('drawAction', chunkAction);
       strokeHistoryRef.current.push(chunkAction);
-      // Keep last point as starting anchor for next segment
       currentPointsRef.current = [coords];
     }
   };
 
-  const handlePointerUp = () => {
+  const handlePointerUp = (e) => {
     if (!isDrawer || !isDrawingRef.current) return;
     isDrawingRef.current = false;
 
@@ -263,13 +266,14 @@ export default function Canvas({
           position: 'relative', 
           width: '100%', 
           aspectRatio: '900 / 600', 
-          maxHeight: '65vh',
+          maxHeight: '62vh',
           background: '#ffffff', 
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: 'inset 0 0 10px rgba(0,0,0,0.05)'
+          boxShadow: 'inset 0 0 10px rgba(0,0,0,0.05)',
+          touchAction: 'none'
         }}
       >
         <canvas
@@ -293,14 +297,14 @@ export default function Canvas({
         {!isDrawer && (
           <div style={{
             position: 'absolute',
-            bottom: '12px',
-            right: '12px',
+            bottom: '8px',
+            right: '8px',
             background: 'rgba(15, 23, 42, 0.75)',
             backdropFilter: 'blur(4px)',
             color: 'white',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '12px',
+            padding: '3px 10px',
+            borderRadius: '16px',
+            fontSize: '11px',
             fontWeight: 600,
             pointerEvents: 'none'
           }}>
@@ -311,68 +315,57 @@ export default function Canvas({
 
       {/* Drawer Toolbar (Visible only when you are drawing) */}
       {isDrawer && (
-        <div 
-          className="card"
-          style={{ 
-            padding: '10px 16px', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between', 
-            gap: '12px', 
-            flexWrap: 'wrap',
-            background: '#ffffff'
-          }}
-        >
+        <div className="card canvas-toolbar">
           {/* Tool selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div className="toolbar-group">
             <button
               onClick={() => setTool('pen')}
               className={`btn ${tool === 'pen' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '8px 12px', fontSize: '14px' }}
+              style={{ padding: '6px 10px', fontSize: '13px' }}
               title="Pen tool"
             >
-              <Pencil size={18} />
+              <Pencil size={16} />
               <span>Pen</span>
             </button>
 
             <button
               onClick={() => setTool('fill')}
               className={`btn ${tool === 'fill' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '8px 12px', fontSize: '14px' }}
+              style={{ padding: '6px 10px', fontSize: '13px' }}
               title="Bucket Fill (Flood Fill)"
             >
-              <PaintBucket size={18} />
+              <PaintBucket size={16} />
               <span>Fill</span>
             </button>
 
             <button
               onClick={() => setTool('eraser')}
               className={`btn ${tool === 'eraser' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ padding: '8px 12px', fontSize: '14px' }}
+              style={{ padding: '6px 10px', fontSize: '13px' }}
               title="Eraser"
             >
-              <Eraser size={18} />
+              <Eraser size={16} />
               <span>Eraser</span>
             </button>
           </div>
 
           {/* Brush Sizes */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div className="toolbar-group">
             {BRUSH_SIZES.map((b) => (
               <button
                 key={b.size}
                 onClick={() => setBrushSize(b.size)}
                 className={`btn ${brushSize === b.size ? 'btn-primary' : 'btn-secondary'}`}
                 style={{ 
-                  padding: '6px 10px', 
-                  fontSize: '12px',
-                  borderRadius: '8px'
+                  padding: '5px 8px', 
+                  fontSize: '11px',
+                  borderRadius: '6px'
                 }}
                 title={`Brush Size: ${b.label}`}
               >
                 <div style={{ 
-                  width: `${Math.min(18, b.size + 4)}px`, 
-                  height: `${Math.min(18, b.size + 4)}px`, 
+                  width: `${Math.min(16, b.size + 3)}px`, 
+                  height: `${Math.min(16, b.size + 3)}px`, 
                   borderRadius: '50%', 
                   background: brushSize === b.size ? 'white' : '#475569' 
                 }} />
@@ -381,7 +374,7 @@ export default function Canvas({
           </div>
 
           {/* Color Palette */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+          <div className="color-palette-group">
             {COLOR_PALETTE.map((c) => (
               <button
                 key={c}
@@ -390,15 +383,16 @@ export default function Canvas({
                   if (tool === 'eraser') setTool('pen');
                 }}
                 style={{
-                  width: '24px',
-                  height: '24px',
+                  width: '22px',
+                  height: '22px',
                   borderRadius: '50%',
                   background: c,
-                  border: color === c ? '3px solid #3b82f6' : '1px solid #cbd5e1',
-                  boxShadow: color === c ? '0 0 8px rgba(59, 130, 246, 0.6)' : 'none',
+                  border: color === c ? '2.5px solid #3b82f6' : '1px solid #cbd5e1',
+                  boxShadow: color === c ? '0 0 6px rgba(59, 130, 246, 0.6)' : 'none',
                   cursor: 'pointer',
-                  transform: color === c ? 'scale(1.2)' : 'scale(1)',
-                  transition: 'transform 0.1s ease'
+                  transform: color === c ? 'scale(1.15)' : 'scale(1)',
+                  transition: 'transform 0.1s ease',
+                  flexShrink: 0
                 }}
                 title={c}
               />
@@ -413,37 +407,38 @@ export default function Canvas({
                 if (tool === 'eraser') setTool('pen');
               }}
               style={{
-                width: '28px',
-                height: '28px',
+                width: '26px',
+                height: '26px',
                 borderRadius: '50%',
                 border: 'none',
                 cursor: 'pointer',
                 padding: '0',
-                background: 'transparent'
+                background: 'transparent',
+                flexShrink: 0
               }}
               title="Custom color"
             />
           </div>
 
           {/* Action buttons: Undo & Clear */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div className="toolbar-group">
             <button
               onClick={handleUndo}
               className="btn btn-secondary"
-              style={{ padding: '8px 12px', fontSize: '14px' }}
+              style={{ padding: '6px 10px', fontSize: '13px' }}
               title="Undo last stroke"
             >
-              <RotateCcw size={16} />
+              <RotateCcw size={15} />
               <span>Undo</span>
             </button>
 
             <button
               onClick={handleClear}
               className="btn btn-danger"
-              style={{ padding: '8px 12px', fontSize: '14px' }}
+              style={{ padding: '6px 10px', fontSize: '13px' }}
               title="Clear Canvas"
             >
-              <Trash2 size={16} />
+              <Trash2 size={15} />
               <span>Clear</span>
             </button>
           </div>

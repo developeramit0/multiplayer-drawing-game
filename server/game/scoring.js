@@ -29,10 +29,6 @@ export function levenshteinDistance(a, b) {
   return matrix[s1.length][s2.length];
 }
 
-/**
- * Check guess against secret word
- * Returns: { isCorrect, isNearMiss, distance }
- */
 export function checkGuess(guess, secretWord) {
   if (!guess || !secretWord) return { isCorrect: false, isNearMiss: false, distance: 99 };
   

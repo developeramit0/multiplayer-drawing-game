@@ -20,7 +20,7 @@
     "socketio",
     "react"
   ],
-  "author": "Amit",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "concurrently": "^10.0.6",

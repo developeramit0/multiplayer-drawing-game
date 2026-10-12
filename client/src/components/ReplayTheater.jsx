@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Play, Pause, RotateCcw, FastForward, Film, ArrowLeft, Palette } from 'lucide-react';
+import { Play, Pause, RotateCcw, FastForward, Film, ArrowLeft } from 'lucide-react';
 import { performFloodFill } from '../utils/floodFill.js';
 
 export default function ReplayTheater({ replays = [], onClose }) {
@@ -102,7 +102,6 @@ export default function ReplayTheater({ replays = [], onClose }) {
 
     currentPlayTimeRef.current += delta;
     const actions = activeReplay.actions;
-    const totalDuration = (activeReplay.duration || 30) * 1000;
 
     while (
       currentActionIndexRef.current < actions.length &&
@@ -139,7 +138,6 @@ export default function ReplayTheater({ replays = [], onClose }) {
     if (!activeReplay || !activeReplay.actions) return;
 
     if (progress >= 1) {
-      // Restart from beginning
       clearCanvas();
       currentActionIndexRef.current = 0;
       currentPlayTimeRef.current = 0;
@@ -182,55 +180,46 @@ export default function ReplayTheater({ replays = [], onClose }) {
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        backgroundColor: 'rgba(15, 23, 42, 0.92)',
         backdropFilter: 'blur(8px)',
         zIndex: 60,
         display: 'flex',
         flexDirection: 'column',
-        padding: '20px',
+        padding: 'clamp(10px, 2vw, 20px)',
         overflow: 'hidden'
       }}
     >
       {/* Top Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
         <button
           onClick={onClose}
           className="btn btn-secondary"
-          style={{ padding: '8px 16px', fontSize: '14px' }}
+          style={{ padding: '6px 12px', fontSize: '13px' }}
         >
-          <ArrowLeft size={18} />
-          <span>Back to Game Over</span>
+          <ArrowLeft size={16} />
+          <span>Back</span>
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
-          <Film size={24} color="#60a5fa" />
-          <h2 style={{ fontSize: '22px', fontWeight: 800 }}>Drawing Replay Theater</h2>
+          <Film size={20} color="#60a5fa" />
+          <h2 style={{ fontSize: 'clamp(16px, 3vw, 20px)', fontWeight: 800 }}>Drawing Replay Theater</h2>
         </div>
 
-        <div style={{ color: '#94a3b8', fontSize: '14px' }}>
-          {replays.length} Drawings Saved
+        <div style={{ color: '#94a3b8', fontSize: '12px' }}>
+          {replays.length} Saved
         </div>
       </div>
 
       {/* Main Content: Sidebar + Canvas Player */}
-      <div style={{ display: 'flex', gap: '20px', flex: 1, minHeight: 0 }}>
+      <div className="replay-container">
         {/* Drawing Selector Sidebar */}
-        <div 
-          className="card"
-          style={{ 
-            width: '280px', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            overflow: 'hidden',
-            background: '#ffffff'
-          }}
-        >
-          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e2e8f0', fontWeight: 700, fontSize: '15px' }}>
+        <div className="card replay-sidebar">
+          <div style={{ padding: '10px 14px', borderBottom: '1px solid #e2e8f0', fontWeight: 700, fontSize: '14px' }}>
             Match Drawings
           </div>
-          <div style={{ flex: 1, overflowY: 'auto', padding: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {replays.length === 0 ? (
-              <div style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', padding: '20px' }}>
+              <div style={{ color: '#64748b', fontSize: '13px', textAlign: 'center', padding: '16px' }}>
                 No drawings recorded.
               </div>
             ) : (
@@ -239,7 +228,7 @@ export default function ReplayTheater({ replays = [], onClose }) {
                   key={idx}
                   onClick={() => setSelectedIdx(idx)}
                   style={{
-                    padding: '10px 14px',
+                    padding: '8px 12px',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     background: selectedIdx === idx ? '#eff6ff' : '#f8fafc',
@@ -248,15 +237,15 @@ export default function ReplayTheater({ replays = [], onClose }) {
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 800, fontSize: '15px', color: '#1e3a8a', textTransform: 'capitalize' }}>
+                    <span style={{ fontWeight: 800, fontSize: '14px', color: '#1e3a8a', textTransform: 'capitalize' }}>
                       {rep.word}
                     </span>
-                    <span style={{ fontSize: '11px', background: '#dbeafe', color: '#1d4ed8', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
+                    <span style={{ fontSize: '10px', background: '#dbeafe', color: '#1d4ed8', padding: '2px 5px', borderRadius: '4px', fontWeight: 700 }}>
                       R{rep.round}
                     </span>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
-                    Drawn by <strong>{rep.drawer.name}</strong> • {rep.actions?.length || 0} strokes
+                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                    By <strong>{rep.drawer.name}</strong> • {rep.actions?.length || 0} strokes
                   </div>
                 </div>
               ))
@@ -265,7 +254,7 @@ export default function ReplayTheater({ replays = [], onClose }) {
         </div>
 
         {/* Canvas Player Box */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
           <div 
             className="card"
             style={{ 
@@ -275,7 +264,9 @@ export default function ReplayTheater({ replays = [], onClose }) {
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              aspectRatio: '900 / 600',
+              maxHeight: '60vh'
             }}
           >
             <canvas 
@@ -287,17 +278,17 @@ export default function ReplayTheater({ replays = [], onClose }) {
             {activeReplay && (
               <div style={{
                 position: 'absolute',
-                top: '16px',
-                left: '16px',
+                top: '12px',
+                left: '12px',
                 background: 'rgba(15, 23, 42, 0.8)',
                 color: 'white',
-                padding: '6px 14px',
-                borderRadius: '8px',
+                padding: '4px 10px',
+                borderRadius: '6px',
                 fontWeight: 700,
-                fontSize: '14px',
+                fontSize: '12px',
                 backdropFilter: 'blur(4px)'
               }}>
-                Drawing: <strong style={{ color: '#60a5fa' }}>{activeReplay.word.toUpperCase()}</strong> by {activeReplay.drawer.name}
+                <strong style={{ color: '#60a5fa' }}>{activeReplay.word.toUpperCase()}</strong> by {activeReplay.drawer.name}
               </div>
             )}
           </div>
@@ -306,33 +297,34 @@ export default function ReplayTheater({ replays = [], onClose }) {
           <div 
             className="card"
             style={{ 
-              padding: '12px 20px', 
+              padding: '10px 14px', 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '16px',
-              background: '#ffffff'
+              gap: '10px',
+              background: '#ffffff',
+              flexWrap: 'wrap'
             }}
           >
             <button
               onClick={handlePlayPause}
               className="btn btn-primary"
-              style={{ padding: '8px 16px', fontSize: '14px' }}
+              style={{ padding: '6px 12px', fontSize: '13px' }}
             >
-              {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+              {isPlaying ? <Pause size={16} /> : <Play size={16} />}
               <span>{isPlaying ? 'Pause' : 'Play'}</span>
             </button>
 
             <button
               onClick={handleRestart}
               className="btn btn-secondary"
-              style={{ padding: '8px 12px' }}
+              style={{ padding: '6px 10px' }}
               title="Replay from start"
             >
-              <RotateCcw size={16} />
+              <RotateCcw size={15} />
             </button>
 
             {/* Scrubber slider */}
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', minWidth: '120px' }}>
               <input
                 type="range"
                 min="0"
@@ -342,7 +334,7 @@ export default function ReplayTheater({ replays = [], onClose }) {
                 onChange={handleScrub}
                 style={{ width: '100%', cursor: 'pointer' }}
               />
-              <span style={{ fontSize: '13px', fontWeight: 700, color: '#64748b', minWidth: '45px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', minWidth: '35px' }}>
                 {Math.round(progress * 100)}%
               </span>
             </div>
@@ -351,10 +343,10 @@ export default function ReplayTheater({ replays = [], onClose }) {
             <button
               onClick={handleSpeedToggle}
               className="btn btn-secondary"
-              style={{ padding: '8px 14px', fontSize: '13px', fontWeight: 800 }}
+              style={{ padding: '6px 10px', fontSize: '12px', fontWeight: 800 }}
               title="Playback speed"
             >
-              <FastForward size={16} />
+              <FastForward size={15} />
               <span>{speed}x</span>
             </button>
           </div>

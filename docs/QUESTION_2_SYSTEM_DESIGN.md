@@ -1,7 +1,6 @@
 # Question 2: Music Streaming with Shared Listening Rooms ("Listen Together")
 ## High-Scale Backend & System Architecture Design Document
 
-**Author:** Amit  
 **Target Scale:** 20M Monthly Active Users (MAU) | 2M Peak Concurrent Listeners | 50M Track Catalogue | 200k Peak Concurrent Shared Rooms (2 to 5,000 Listeners / Room)
 
 ---

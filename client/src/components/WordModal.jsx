@@ -13,47 +13,47 @@ export default function WordModal({ words = [], onSelect, timeout = 15 }) {
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 50,
-        padding: '16px'
+        padding: '12px'
       }}
     >
       <div 
         className="card pop-in"
         style={{
-          maxWidth: '520px',
+          maxWidth: '460px',
           width: '100%',
-          padding: '28px',
+          padding: 'clamp(18px, 4vw, 28px)',
           textAlign: 'center',
           background: '#ffffff',
           borderRadius: '16px'
         }}
       >
-        <div style={{ display: 'inline-flex', padding: '12px', background: '#eff6ff', borderRadius: '50%', marginBottom: '12px' }}>
-          <Sparkles size={32} color="#3b82f6" />
+        <div style={{ display: 'inline-flex', padding: '10px', background: '#eff6ff', borderRadius: '50%', marginBottom: '8px' }}>
+          <Sparkles size={28} color="#3b82f6" />
         </div>
 
-        <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#1e3a8a', marginBottom: '8px' }}>
+        <h2 style={{ fontSize: 'clamp(20px, 4.5vw, 24px)', fontWeight: 800, color: '#1e3a8a', marginBottom: '6px' }}>
           It's Your Turn to Draw!
         </h2>
-        <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '20px' }}>
-          Choose one secret word from the list below before the timer runs out:
+        <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '16px' }}>
+          Choose one secret word before the timer runs out:
         </p>
 
         {/* Word Options */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
           {words.map((word, index) => (
             <button
               key={index}
               onClick={() => onSelect(word)}
               className="btn btn-primary"
               style={{
-                padding: '16px 20px',
-                fontSize: '20px',
+                padding: '12px 16px',
+                fontSize: 'clamp(16px, 4vw, 19px)',
                 fontWeight: 700,
                 letterSpacing: '1px',
                 textTransform: 'uppercase',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 background: index === 0 ? '#3b82f6' : index === 1 ? '#06b6d4' : '#8b5cf6',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
               }}
             >
               {word}
@@ -67,12 +67,12 @@ export default function WordModal({ words = [], onSelect, timeout = 15 }) {
           gap: '6px', 
           color: '#f59e0b', 
           fontWeight: 700, 
-          fontSize: '14px',
+          fontSize: '13px',
           background: '#fef3c7',
-          padding: '6px 14px',
+          padding: '5px 12px',
           borderRadius: '20px'
         }}>
-          <Clock size={16} />
+          <Clock size={15} />
           <span>Auto-selecting in {timeout}s...</span>
         </div>
       </div>

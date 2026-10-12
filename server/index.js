@@ -70,7 +70,7 @@ app.use((req, res, next) => {
   }
   res.sendFile(path.join(clientDist, 'index.html'), (err) => {
     if (err) {
-      res.send('Skribbl Multiplayer Server Running. Start Vite client for frontend or run `npm run build`.');
+      res.send('DoodleClash Server Running. Start Vite client for frontend or run `npm run build`.');
     }
   });
 });
@@ -335,8 +335,6 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
-  console.log(`=======================================================`);
-  console.log(`🚀 Skribbl Multiplayer Server listening on port ${PORT}`);
-  console.log(`📡 WebSocket ready with 30s reconnect window & abuse protection`);
-  console.log(`=======================================================`);
+  console.log(`🚀 DoodleClash Server listening on port ${PORT}`);
+  console.log(`📡 WebSocket ready with reconnect window & rate limiting`);
 });

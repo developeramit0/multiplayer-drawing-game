@@ -1,7 +1,3 @@
-/**
- * Manages drawing state for the active turn and records stroke-by-stroke history
- * for the end-of-game replay gallery.
- */
 export class DrawingManager {
   constructor() {
     this.currentActions = []; // Actions for current turn

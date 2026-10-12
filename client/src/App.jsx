@@ -54,6 +54,7 @@ export default function App() {
   const [messages, setMessages] = useState([]);
   const [canvasHistory, setCanvasHistory] = useState([]);
   const [guessedPlayerIds, setGuessedPlayerIds] = useState([]);
+  const [mobileTab, setMobileTab] = useState('chat'); // 'chat' | 'players'
 
   // Auto-join on reconnect or query parameter
   useEffect(() => {
@@ -340,36 +341,52 @@ export default function App() {
             onLeaveRoom={handleLeaveRoom}
           />
 
-          {/* 3-Column Game Board */}
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '240px 1fr 300px', 
-            gap: '12px', 
-            flex: 1, 
-            minHeight: '600px'
-          }}>
+          {/* Responsive Game Board */}
+          <div className="game-board">
             {/* Left Column: Player Leaderboard */}
-            <PlayerList
-              players={players}
-              currentDrawerId={gameState.currentDrawer?.id}
-              myPlayerId={sessionId}
-              guessedPlayerIds={guessedPlayerIds}
-            />
+            <div className={`game-col-players ${mobileTab !== 'players' ? 'mobile-hidden' : ''}`}>
+              <PlayerList
+                players={players}
+                currentDrawerId={gameState.currentDrawer?.id}
+                myPlayerId={sessionId}
+                guessedPlayerIds={guessedPlayerIds}
+              />
+            </div>
 
             {/* Center Column: Canvas & Drawer Controls */}
-            <Canvas
-              key={`canvas-${gameState.round}-${gameState.currentDrawer?.id}`}
-              isDrawer={gameState.isDrawer}
-              initialHistory={canvasHistory}
-              roomId={roomId}
-            />
+            <div className="game-col-canvas">
+              <Canvas
+                key={`canvas-${gameState.round}-${gameState.currentDrawer?.id}`}
+                isDrawer={gameState.isDrawer}
+                initialHistory={canvasHistory}
+                roomId={roomId}
+              />
+
+              {/* Mobile Tab Switcher (Visible on mobile <= 860px) */}
+              <div className="mobile-tabs" style={{ marginTop: '8px' }}>
+                <button 
+                  className={`mobile-tab-btn ${mobileTab === 'chat' ? 'active' : ''}`}
+                  onClick={() => setMobileTab('chat')}
+                >
+                  <span>💬 Chat & Guesses</span>
+                </button>
+                <button 
+                  className={`mobile-tab-btn ${mobileTab === 'players' ? 'active' : ''}`}
+                  onClick={() => setMobileTab('players')}
+                >
+                  <span>🏆 Leaderboard ({players.length})</span>
+                </button>
+              </div>
+            </div>
 
             {/* Right Column: Chat & Guesses */}
-            <ChatBox
-              messages={messages}
-              isDrawer={gameState.isDrawer}
-              hasGuessed={gameState.hasGuessed}
-            />
+            <div className={`game-col-chat ${mobileTab !== 'chat' ? 'mobile-hidden' : ''}`}>
+              <ChatBox
+                messages={messages}
+                isDrawer={gameState.isDrawer}
+                hasGuessed={gameState.hasGuessed}
+              />
+            </div>
           </div>
 
           {/* Drawer Word Selection Modal */}

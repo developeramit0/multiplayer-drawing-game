@@ -1,7 +1,3 @@
-/**
- * Fast BFS Flood Fill algorithm on HTML5 Canvas ImageData
- */
-
 function hexToRgba(hex) {
   let c = hex.replace('#', '');
   if (c.length === 3) {

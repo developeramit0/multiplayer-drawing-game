@@ -1,12 +1,7 @@
-/**
- * Web Audio API synthesizer for game sound effects
- * Zero external audio assets required.
- */
-
 class SoundEffects {
   constructor() {
     this.ctx = null;
-    this.muted = localStorage.getItem('skribbl_muted') === 'true';
+    this.muted = localStorage.getItem('dc_sound_muted') === 'true';
   }
 
   init() {
@@ -23,7 +18,7 @@ class SoundEffects {
 
   toggleMute() {
     this.muted = !this.muted;
-    localStorage.setItem('skribbl_muted', this.muted);
+    localStorage.setItem('dc_sound_muted', this.muted);
     return this.muted;
   }
 
@@ -53,7 +48,6 @@ class SoundEffects {
   }
 
   playCorrect() {
-    // Rising melodic chime: C5 -> E5 -> G5 -> C6
     this.playTone(523.25, 'triangle', 0.12, 0.0, 0.2);
     this.playTone(659.25, 'triangle', 0.12, 0.08, 0.2);
     this.playTone(783.99, 'triangle', 0.14, 0.16, 0.2);
@@ -61,24 +55,20 @@ class SoundEffects {
   }
 
   playNearMiss() {
-    // Subtle double chirp
     this.playTone(440, 'sine', 0.08, 0.0, 0.15);
     this.playTone(466.16, 'sine', 0.12, 0.07, 0.15);
   }
 
   playTick() {
-    // Crisp click for countdown
     this.playTone(800, 'sine', 0.03, 0.0, 0.08);
   }
 
   playTurnStart() {
-    // Upbeat alert
     this.playTone(392.00, 'sine', 0.1, 0.0, 0.15);
     this.playTone(587.33, 'sine', 0.18, 0.1, 0.18);
   }
 
   playWin() {
-    // Fanfare chord
     this.playTone(523.25, 'triangle', 0.3, 0.0, 0.2);
     this.playTone(659.25, 'triangle', 0.3, 0.0, 0.2);
     this.playTone(783.99, 'triangle', 0.4, 0.0, 0.2);

@@ -1,24 +1,10 @@
 import { io } from 'socket.io-client';
 
-/**
- * Benchmark load test script for Skribbl Multiplayer Server.
- * Simulates multiple concurrent rooms and players emitting drawing strokes and guesses.
- * Measures: Memory footprint, event broadcast latency, messages per second.
- */
 
 const SERVER_URL = process.env.TEST_SERVER_URL || 'http://localhost:4000';
 const ROOM_COUNT = parseInt(process.argv[2] || '30', 10);
 const PLAYERS_PER_ROOM = parseInt(process.argv[3] || '4', 10);
 const TEST_DURATION_SEC = parseInt(process.argv[4] || '5', 10);
-
-console.log(`\n======================================================`);
-console.log(`  SKRIBBL LOAD TEST BENCHMARK`);
-console.log(`======================================================`);
-console.log(`Target: ${SERVER_URL}`);
-console.log(`Rooms to simulate: ${ROOM_COUNT}`);
-console.log(`Players per room: ${PLAYERS_PER_ROOM}`);
-console.log(`Total active clients: ${ROOM_COUNT * PLAYERS_PER_ROOM}`);
-console.log(`Test duration: ${TEST_DURATION_SEC} seconds\n`);
 
 let connectedClients = [];
 let totalStrokesSent = 0;
@@ -50,7 +36,6 @@ async function createClient(name, avatar) {
 
 async function runBenchmark() {
   const startTime = Date.now();
-  console.log(`⏳ Connecting ${ROOM_COUNT * PLAYERS_PER_ROOM} virtual players...`);
 
   for (let r = 0; r < ROOM_COUNT; r++) {
     // 1. Create host
@@ -105,9 +90,6 @@ async function runBenchmark() {
   // Brief pause to allow word selection
   await new Promise((res) => setTimeout(res, 800));
 
-  console.log(`\n✅ All ${connectedClients.length} clients connected, rooms initialized, games active!`);
-  console.log(`🚀 Simulating real-time drawing streams for ${TEST_DURATION_SEC} seconds...\n`);
-
   // Start traffic generation
   const trafficInterval = setInterval(() => {
     for (let r = 0; r < ROOM_COUNT; r++) {
@@ -142,19 +124,6 @@ async function runBenchmark() {
     : '10.2';
 
   const throughput = Math.round(totalMessagesReceived / TEST_DURATION_SEC);
-
-  console.log(`======================================================`);
-  console.log(`  BENCHMARK RESULTS`);
-  console.log(`======================================================`);
-  console.log(`Concurrent Rooms:       ${ROOM_COUNT}`);
-  console.log(`Connected Players:      ${connectedClients.length}`);
-  console.log(`Strokes Dispatched:     ${totalStrokesSent}`);
-  console.log(`Messages Broadcasted:   ${totalMessagesReceived}`);
-  console.log(`Broadcast Throughput:   ${throughput} msgs/sec`);
-  console.log(`Average Latency:        ${avgLatency} ms`);
-  console.log(`P95 Latency:            ${p95Latency} ms`);
-  console.log(`Process Memory (RSS):   ${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB`);
-  console.log(`======================================================\n`);
 
   for (const client of connectedClients) {
     client.socket.disconnect();
