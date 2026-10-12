@@ -203,6 +203,29 @@ io.on('connection', (socket) => {
     room.gameState.startGame();
   });
 
+  // 4b. Return to Room Lobby (Host only)
+  socket.on('returnToLobby', () => {
+    const mapping = roomManager.socketToRoom.get(socket.id);
+    if (!mapping) return;
+    const room = roomManager.getRoom(mapping.roomId);
+    if (!room || room.hostId !== mapping.playerId) return;
+
+    room.gameState.resetToLobby();
+  });
+
+  // 4c. Player Leaves Room
+  socket.on('leaveRoom', () => {
+    const mapping = roomManager.socketToRoom.get(socket.id);
+    if (!mapping) return;
+    const { roomId, playerId } = mapping;
+    socket.leave(roomId);
+    roomManager.socketToRoom.delete(socket.id);
+    const room = roomManager.getRoom(roomId);
+    if (room) {
+      room.removePlayerPermanently(playerId);
+    }
+  });
+
   // 5. Drawer chooses word
   socket.on('selectWord', ({ word }) => {
     const mapping = roomManager.socketToRoom.get(socket.id);

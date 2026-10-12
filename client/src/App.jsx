@@ -163,6 +163,19 @@ export default function App() {
       setGameOverData({ scores, replays });
     });
 
+    socket.on('returnedToLobby', ({ scores }) => {
+      setGameOverData(null);
+      setRoundRecapData(null);
+      setShowWordModal(false);
+      setGameState((prev) => ({
+        ...prev,
+        status: 'LOBBY',
+        round: 1,
+        scores: scores || prev.scores
+      }));
+      if (scores) setPlayers(scores);
+    });
+
     socket.on('settingsUpdated', (newSettings) => {
       setSettings(newSettings);
     });
@@ -184,6 +197,7 @@ export default function App() {
       socket.off('roundRecap');
       socket.off('drawerLeftMidTurn');
       socket.off('gameOver');
+      socket.off('returnedToLobby');
       socket.off('settingsUpdated');
       socket.off('hostChanged');
     };
@@ -258,6 +272,38 @@ export default function App() {
     socket.emit('startGame');
   };
 
+  const handleReturnToLobby = () => {
+    socket.emit('returnToLobby');
+    setGameOverData(null);
+  };
+
+  const handleLeaveRoom = () => {
+    socket.emit('leaveRoom');
+    setIsInRoom(false);
+    setRoomId('');
+    setIsHost(false);
+    setGameOverData(null);
+    setRoundRecapData(null);
+    setShowWordModal(false);
+    setMessages([]);
+    setCanvasHistory([]);
+    setGuessedPlayerIds([]);
+    window.history.replaceState({}, document.title, window.location.pathname);
+    setGameState({
+      status: 'LOBBY',
+      round: 1,
+      maxRounds: 3,
+      drawTime: 60,
+      timeLeft: 60,
+      currentDrawer: null,
+      isDrawer: false,
+      word: null,
+      blanks: '',
+      hasGuessed: false,
+      scores: []
+    });
+  };
+
   return (
     <div className="app-container">
       {/* If game is in Lobby or player hasn't joined a room yet */}
@@ -291,6 +337,7 @@ export default function App() {
             blanks={gameState.blanks}
             roomId={roomId}
             drawerName={gameState.currentDrawer?.name}
+            onLeaveRoom={handleLeaveRoom}
           />
 
           {/* 3-Column Game Board */}
@@ -353,6 +400,8 @@ export default function App() {
               replays={gameOverData.replays}
               isHost={isHost}
               onPlayAgain={handlePlayAgain}
+              onReturnToLobby={handleReturnToLobby}
+              onLeaveRoom={handleLeaveRoom}
             />
           )}
         </div>

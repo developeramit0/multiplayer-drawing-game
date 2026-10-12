@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Volume2, VolumeX, Copy, Check, Share2, Clock, Palette } from 'lucide-react';
+import { Volume2, VolumeX, Copy, Check, Share2, Clock, Palette, LogOut } from 'lucide-react';
 import { sounds } from '../utils/sound.js';
 
 export default function Header({ 
@@ -11,7 +11,8 @@ export default function Header({
   word, 
   blanks, 
   roomId, 
-  drawerName 
+  drawerName,
+  onLeaveRoom
 }) {
   const [copied, setCopied] = useState(false);
   const [muted, setMuted] = useState(sounds.isMuted());
@@ -126,6 +127,17 @@ export default function Header({
         >
           {muted ? <VolumeX size={18} color="#ef4444" /> : <Volume2 size={18} color="#3b82f6" />}
         </button>
+
+        {onLeaveRoom && (
+          <button
+            onClick={onLeaveRoom}
+            className="btn btn-secondary"
+            style={{ padding: '8px', borderRadius: '50%', color: '#ef4444' }}
+            title="Leave Room & Go Home"
+          >
+            <LogOut size={18} />
+          </button>
+        )}
       </div>
     </header>
   );

@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Trophy, Film, RotateCcw, Medal } from 'lucide-react';
+import { Trophy, Film, RotateCcw, Home, Users, LogOut } from 'lucide-react';
 import { sounds } from '../utils/sound.js';
 import ReplayTheater from './ReplayTheater.jsx';
 
 const AVATARS = ['🦊', '🐼', '🦁', '🐸', '🐨', '🦄', '🐙', '🐯'];
 
-export default function GameOverModal({ scores = [], replays = [], isHost, onPlayAgain }) {
+export default function GameOverModal({ 
+  scores = [], 
+  replays = [], 
+  isHost, 
+  onPlayAgain,
+  onReturnToLobby,
+  onLeaveRoom
+}) {
   const [showReplayTheater, setShowReplayTheater] = useState(false);
 
   useEffect(() => {
@@ -75,7 +82,9 @@ export default function GameOverModal({ scores = [], replays = [], isHost, onPla
           textAlign: 'center',
           background: '#ffffff',
           borderRadius: '20px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          maxHeight: '90vh',
+          overflowY: 'auto'
         }}
       >
         <div style={{ display: 'inline-flex', padding: '16px', background: '#fef3c7', borderRadius: '50%', marginBottom: '16px' }}>
@@ -177,6 +186,7 @@ export default function GameOverModal({ scores = [], replays = [], isHost, onPla
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {/* Watch Replays */}
           <button
             onClick={() => setShowReplayTheater(true)}
             className="btn btn-primary"
@@ -193,16 +203,49 @@ export default function GameOverModal({ scores = [], replays = [], isHost, onPla
             <span>Watch Stroke-by-Stroke Replay Theater ({replays.length} Drawings)</span>
           </button>
 
+          {/* Host Controls */}
           {isHost && (
-            <button
-              onClick={onPlayAgain}
-              className="btn btn-success"
-              style={{ padding: '12px 20px', fontSize: '15px' }}
-            >
-              <RotateCcw size={18} />
-              <span>Play Again</span>
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={onPlayAgain}
+                className="btn btn-success"
+                style={{ flex: 1, padding: '12px 16px', fontSize: '15px' }}
+                title="Start a new game immediately"
+              >
+                <RotateCcw size={18} />
+                <span>Play Again</span>
+              </button>
+
+              <button
+                onClick={onReturnToLobby}
+                className="btn btn-secondary"
+                style={{ flex: 1, padding: '12px 16px', fontSize: '15px', background: '#e0e7ff', color: '#3730a3' }}
+                title="Back to Room Lobby to change settings or wait for players"
+              >
+                <Users size={18} />
+                <span>Back to Lobby</span>
+              </button>
+            </div>
           )}
+
+          {/* Home / Leave Room Button for all players */}
+          <button
+            onClick={onLeaveRoom}
+            className="btn btn-secondary"
+            style={{ 
+              padding: '12px 16px', 
+              fontSize: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#dc2626',
+              background: '#fee2e2'
+            }}
+            title="Exit current room and return to home screen"
+          >
+            <Home size={18} />
+            <span>Leave Room & Go to Home</span>
+          </button>
         </div>
       </div>
     </div>

@@ -356,6 +356,29 @@ export class GameState {
     this.broadcastState();
   }
 
+  resetToLobby() {
+    this.clearTimer();
+    this.status = GAME_STATUS.LOBBY;
+    this.currentRound = 1;
+    this.currentTurnIndex = 0;
+    this.currentDrawerId = null;
+    this.secretWord = '';
+    this.wordOptions = [];
+    this.revealedHintIndices.clear();
+    this.guessedPlayerIds.clear();
+    this.turnGuessRank = 0;
+    this.drawingManager.reset();
+
+    for (const p of this.room.players.values()) {
+      p.score = 0;
+    }
+
+    this.io.to(this.room.id).emit('returnedToLobby', {
+      scores: this.room.getScores()
+    });
+    this.broadcastState();
+  }
+
   clearTimer() {
     if (this.timer) {
       clearInterval(this.timer);
